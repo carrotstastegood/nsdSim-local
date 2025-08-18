@@ -1,0 +1,61 @@
+{
+
+    // Take from the biggest value
+    // Full list of tags and what they mean:
+    //
+    // JSON Tag                 | What it means                     | Census ID    | Math
+    // ----------------------------------------------------------------------------------
+    //
+    // hardVote                 : Citizens will vote per conditions  [----]
+    // neverVote                : Citizens will not vote for this    [----]
+    //
+    // civilRightsDown          : Decreases civil rights             [cid0]
+    // civilRightsUp            : Increases civil rights             [^^^^]
+    // politicalRightsDown      : Decreases political rights         [cid2]
+    // politicalRightsUp        : Increases political rights         [^^^^]
+    // conservativeDown         : Decreases social conservatism      [cid8]
+    // conservativeUp           : Increases social conservatism      [^^^^]
+    // taxDownSmall             : Decreases income tax a little      [cid49]        (1 / 100) - (10/100) // Anything below one is not counted as a tax shift
+    // taxDownMedium            : Decreases income tax               [^^^^^]        (10.001/100) - (15/100)
+    // taxDownLarge             : Decreases income tax a lot         [^^^^^]        (15.001/100) - (100/100)
+    // taxUpSmall               : Increases income tax a little      [^^^^^]        Above applies
+    // taxUpMedium              : Increases income tax               [^^^^^]        ^
+    // taxUpLarge               : Increases income tax a lot         [^^^^^]        ^
+
+
+    // Do not include opposites of tags (ex. civilRightsDown : true, civilRightsUp : false)
+    
+    // Large table of each Nationstates issue and their tags to determine who votes for what.
+
+    "id0" : {
+
+        "options" : 3,
+
+        "optionOne" : {
+
+            "civilRightsDown" : true,
+            "politicalRightsUp" : true,
+            "conservativeUp" : true,
+            "taxUpSmall" : true 
+
+        },
+
+        "optionTwo" : {
+
+            "civilRightsUp" : true,
+            "politicalRightsDown" : true,
+            "conservatismDown" : true
+
+        },
+
+        "optionThree" : {
+
+            "neverVote" : true
+
+        }
+
+    },
+
+    "id1" : {}
+
+}
