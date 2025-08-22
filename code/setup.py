@@ -1,7 +1,8 @@
 import asyncio
-import nationstates
 import os
 import json
+
+from awesomeNations import AwesomeNations
 
 os.system("clear")
 
@@ -18,14 +19,31 @@ writeSetup
 
 # Prepare for getting user data
 
-api = nationstates.Nationstates("Mozilla/5.0 (X11; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0")
+api = AwesomeNations("Mozilla/5.0 (X11; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0")
 
-nation = str(input("Name of your nation:"))
+#nation = str(input("Name of your nation > "))
+nation = "umidus"
 nationurl = "https://www.nationstates.net/cgi-bin/api.cgi?nation=" + nation + ";q=+population+census;scale=all"
+
+if nation in ["gaster", "Gaster", "GASTER"]:
+    raise TypeError("im winging my ding")
 
 # Get user data
 
-data = api.nation(nation)
-thing = data.get_shards("animal")
+data = api.Nation(nation)
+census = data.get_shards("census", scale=0)
 
-print(thing["animal"])
+def newShard(id):
+    global data
+    global census
+
+    census = data.get_shards("census", scale=id)
+
+# census["nation"]["census"]["scale"][]
+
+newShard(2)
+print(census)
+score = census["nation"]["census"]["scale"]["score"]
+print(score)
+
+#print(thing["animal"])
