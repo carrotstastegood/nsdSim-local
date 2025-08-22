@@ -1,20 +1,31 @@
 import asyncio
-import json
+import nationstates
 import os
-import requests
-import xml.etree.ElementTree as xml
+import json
 
 os.system("clear")
 
-with open("json/prefs.jsonc", "r") as p:
-    prefs = json.load(p)
-setup = prefs.get("setup", False)
-with open("json/prefs.jsonc", "w") as p:
-    prefs["setup"] = True
-    json.dump(prefs, p, indent=4)
+# Set setup to true
 
-print("")
+def writeSetup():
+    with open("json/prefs.jsonc", "r") as p:
+        prefs = json.load(p)
+    setup = prefs.get("setup", False)
+    with open("json/prefs.jsonc", "w") as p:
+        prefs["setup"] = True
+        json.dump(prefs, p, indent=4)
+writeSetup
 
-agent = {"User-Agent" : "Mozilla/5.0 (X11; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0"}
+# Prepare for getting user data
 
-nation = input("")
+api = nationstates.Nationstates("Mozilla/5.0 (X11; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0")
+
+nation = str(input("Name of your nation:"))
+nationurl = "https://www.nationstates.net/cgi-bin/api.cgi?nation=" + nation + ";q=+population+census;scale=all"
+
+# Get user data
+
+data = api.nation(nation)
+thing = data.get_shards("animal")
+
+print(thing["animal"])
