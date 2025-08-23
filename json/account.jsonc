@@ -2,13 +2,19 @@
 
     "nationstates" : {
 
-        "name" : ""
+        "nation" : "",
+        "census" : {
+            "civil" : 0
+        }
 
     },
 
     "nsdSim" : {
 
-        "nationurl" : ""
+        "username" : "",
+        "url" : "",
+        "vol" : 0.00,
+        "debug" : false
 
     }
 
