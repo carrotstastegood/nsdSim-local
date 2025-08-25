@@ -1,4 +1,3 @@
-import asyncio
 import math
 import os
 import json
@@ -9,14 +8,11 @@ os.system("clear")
 
 # Set setup to true
 
-def writeSetup():
-    with open("json/prefs.jsonc", "r") as p:
-        prefs = json.load(p)
-    setup = prefs.get("setup", False)
-    with open("json/prefs.jsonc", "w") as p:
-        prefs["setup"] = True
-        json.dump(prefs, p, indent=4)
-writeSetup
+
+with open("json/prefs.jsonc", "r") as p:
+    prefs = json.load(p)
+with open("json/account.jsonc", "r") as a:
+    acc = json.load(a)
 
 # Prepare for getting user data
 
@@ -82,6 +78,9 @@ if rawData.status_code == 200: # Do the thing
     #---Actual Configuration---#
 
     username = input("Enter a username > ")
+    if username == "":
+        username = "empty"
+        print("Empty input: username set to empty. You can change this later.")
     vol = input("Sound volume > ")
     debug = input("Show extra debug information? (y/n) > ")
 
@@ -160,3 +159,15 @@ if rawData.status_code == 200: # Do the thing
     #float(arms), float(army), float(pacifism)
     #warSupport = (((arms + army) / 2) - (pacifism * 1.5))
     #print(warSupport)
+
+    with open("json/prefs.jsonc", "w") as p:
+        prefs["setup"] = True
+        prefs["vol"] = vol
+        prefs["debug"] = debug
+    
+    with open("json/account.jsonc", "w") as a:
+        acc["nsdSim"]["username"] = username
+        acc["nsdSim"]["url"] = url
+
+    json.dump(prefs, p, indent=4)
+    json.dump(acc, all, indent=4)

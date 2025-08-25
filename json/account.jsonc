@@ -12,9 +12,7 @@
     "nsdSim" : {
 
         "username" : "",
-        "url" : "",
-        "vol" : 0.00,
-        "debug" : false
+        "url" : ""
 
     }
 
