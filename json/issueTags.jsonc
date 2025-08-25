@@ -3,25 +3,29 @@
     // Take from the biggest value
     // Full list of tags and what they mean:
     //
-    // JSON Tag                 | What it means                     | Census ID    | Math
-    // ----------------------------------------------------------------------------------
+    // JSON Tag                 | What it means                     | Census ID |
+    // --------------------------------------------------------------------------
     //
     // hardVote                 : Citizens will vote per conditions  [----]
     // neverVote                : Citizens will not vote for this    [----]
     //
-    // civilRightsDown          : Decreases civil rights             [cid0]
-    // civilRightsUp            : Increases civil rights             [^^^^]
-    // politicalRightsDown      : Decreases political rights         [cid2]
-    // politicalRightsUp        : Increases political rights         [^^^^]
-    // conservativeDown         : Decreases social conservatism      [cid8]
-    // conservativeUp           : Increases social conservatism      [^^^^]
-    // taxDownSmall             : Decreases income tax a little      [cid49]        (1 / 100) - (10/100) // Anything below one is not counted as a tax shift
-    // taxDownMedium            : Decreases income tax               [^^^^^]        (10.001/100) - (15/100)
-    // taxDownLarge             : Decreases income tax a lot         [^^^^^]        (15.001/100) - (100/100)
-    // taxUpSmall               : Increases income tax a little      [^^^^^]        Above applies
-    // taxUpMedium              : Increases income tax               [^^^^^]        ^
-    // taxUpLarge               : Increases income tax a lot         [^^^^^]        ^
+    // civilRights              : Affects civil rights               [cid0]
+    // politicalRights          : Affects political rights           [cid2]
+    // conservatism             : Affects conservatism               [cid8]
+    // tax                      : Affects income tax                 [cid49]
+    // ^^ Note: The value changing by less than one does not count as a change. a change from 1-10 is a little, 11-15 is medium, everything else is large.
+    // ---------------------------------------------------------------------------
+    //
+    // Following is tags used to determine the affect on the previous tags.
+    //
+    // down                     : Lowers.
+    // up                       : Increases.
+    // small                    : For taxes: small amount.
+    // medium                   : For taxes: medium amount.
+    // large                    : For taxes: large amount.
 
+
+    // 
 
     // Do not include opposites of tags (ex. civilRightsDown : true, civilRightsUp : false)
     
@@ -33,18 +37,18 @@
 
         "optionOne" : {
 
-            "civilRightsDown" : true,
-            "politicalRightsUp" : true,
-            "conservativeUp" : true,
-            "taxUpSmall" : true 
+            "civilRights" : "down",
+            "politicalRights" : "up",
+            "conservatism" : "up",
+            "tax" : "small" 
 
         },
 
         "optionTwo" : {
 
-            "civilRightsUp" : true,
-            "politicalRightsDown" : true,
-            "conservatismDown" : true
+            "civil" : "up",
+            "politicalRights" : "down",
+            "conservatism" : "down"
 
         },
 
