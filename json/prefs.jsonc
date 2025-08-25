@@ -1,5 +1,5 @@
 {
     "setup": false,
     "vol" : 0.00,
-    "debug" : false
+    "debug" : true
 }
