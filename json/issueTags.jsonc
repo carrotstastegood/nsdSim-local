@@ -31,11 +31,11 @@
     
     // Large table of each Nationstates issue and their tags to determine who votes for what.
 
-    "id0" : {
+    "id0" : { // Issue id zero.
 
         "options" : 3,
 
-        "optionOne" : {
+        "optionOne" : { // Stats for choice one
 
             "civilRights" : "down",
             "politicalRights" : "up",

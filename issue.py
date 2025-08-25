@@ -1,44 +1,61 @@
 import math
 import os
-import json
-import requests
-import xml.etree.ElementTree as xml
+import commentjson as cjson
+
+allowed = [0]
+
+while True: # Input loop
+    try:
+        issue = int(input("What issue are you simulating? (Answer in a number.) > "))
+        if int(issue) not in allowed:
+            print("Support for that issue is not provided.")
+        else:
+            break
+    except ValueError:
+        print("You must provide an integer.")
+
+idBase = "id" + str(issue) + "c"
+iid = ""
 
 with open("json/issueTags.jsonc", "r") as issueTags:
-    data = json.load(issueTags)
+    data = cjson.load(issueTags)
 
-# Long list of variables.
+    # Long list of variables.
 
-id0cn = data.load("id0", {}).get("options") # Issue id 0, amount of choices.
-id0c1 = data.load("id0", {}).get("optionOne", {}) # Issue id 0, choise 1.
-id0c2 = data.load("id0", {}).get("optionTwo", {})
-id0c3 = data.load("id0", {}).get("optionThree", {})
+    id0cn = data.get("id0", {}).get("options") # Issue id 0, amount of choices.
+    id0c1 = data.get("id0", {}).get("optionOne", {}) # Issue id 0, choise 1.
+    id0c2 = data.get("id0", {}).get("optionTwo", {})
+    id0c3 = data.get("id0", {}).get("optionThree", {})
 
 civilRights = 64.89
 conservatism = 43.67
 politicalRights = 52.95
 tax = 73.25
 
-libWeight = {
-
+weight = {
     "choiceOne" : 0.00,
     "choiceTwo" : 0.00,
     "choiceThree" : 0.00,
     "choiceFour" : 0.00,
     "choiceFive" : 0.00
-
 }
 
-def scanTags(lib, c): # lib should be in the format of id0c1
+short = {
+    "1" : "choiceOne",
+    "2" : "choiceTwo",
+    "3" : "choiceThree",
+    "4" : "choiceFour",
+    "5" : "choiceFive"
+} 
+
+def weigh(n):
     
-    if lib["civilRightsDown"]:
-        if civilRights >= 65 and civilRights is not 85:
-            libWeight[c] += 0.05
-        elif civilRights >= 85:
-            libWeight[c] += 0.07
-        else:
-            libWeight[c] -= 2
+    global iid
+    n = str(n)
+    iid = idBase + n
+
+    choice = short[n]
+    print(iid)
 
 
-
-print(id0c1)
+weigh(1)
