@@ -97,3 +97,65 @@ def weigh(n):
 weigh(1)
 
 print(weight)
+
+# Calculate and show final scores
+
+total = weight["choiceOne"] + weight["choiceTwo"] + weight["choiceThree"] + weight["choiceFour"] + weight["choiceFive"]
+while True:
+    try:
+        one = (weight["choiceOne"] / total) * 100
+        two = (weight["choiceTwo"] / total) * 100
+        three = (weight["choiceThree"] / total) * 100
+        four = (weight["choiceFour"] / total) * 100
+        five = (weight["choiceFive"] / total) * 100
+        break
+    except ZeroDivisionError:
+        total = 1
+        print(f"Total weight is {total}, read as zero.")
+
+
+scores = { # Used for checking the largest value - the winner
+    "one" : one,
+    "two" : two,
+    "three" : three,
+    "four" : four,
+    "five" : five
+}
+
+victor = max(scores, key=scores.get)
+popularity = 75.00 # Will be loaded one it exists; It will be used / needed later.
+
+print("Final scores:")
+print()
+print(f"Option one: {one}% ({weight['choiceOne']})")
+print(f"Option two: {two}% ({weight['choiceTwo']})")
+print(f"Option three: {three}% ({weight['choiceThree']})")
+print(f"Option four: {four}% ({weight['choiceFour']})")
+print(f"Option five: {five}% ({weight['choiceFive']})")
+print()
+print(f"Winning option: {victor}")
+print()
+
+while True:
+    vote = input("Which choice will you implement? (full word) > ")
+    if vote != victor and vote in ["one", "two", "three", "four", "five"]:
+        for x in range(round(scores[victor] / 50)):
+            popularity -= (scores[victor] / 8)
+            dprint(f"Popularity: {popularity}")
+        print(f"Current party populatity: {popularity}")
+        break
+    elif vote == victor:
+        break
+    else:
+        print("Input must be a whole word (ex. one), and must be in all lower case")
+
+auto = input("Do you want to automatically answer? (WON'T GIVE TRADING CARDS) (y/N) ") # Will answer the issue later.
+while True:
+    if auto in ["n", "N", ""]:
+        break
+    elif auto in ["y", "Y"]:
+        break
+    else:
+        print("Invalid input.")
+
+input("Press enter to exit: ")
