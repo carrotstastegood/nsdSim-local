@@ -23,7 +23,7 @@ while True:
     url = "https://www.nationstates.net/cgi-bin/api.cgi?nation=" + nation + ";q=+population"
 
     if nation in ["gaster", "Gaster", "GASTER"]:
-        raise TypeError("im winging my ding")
+        raise ConnectionAbortedError
 
     # Get user data
 
