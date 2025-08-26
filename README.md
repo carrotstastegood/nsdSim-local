@@ -4,20 +4,20 @@ Localy Run Unofficial Nationstates Democracy Simulator
 This version of nsdSim runs on your computer.
 
 ## TODO
-fix data loading in issue.py
-fetch user agent during setup.
+
+## Server stuff (here because no one else can read this so it dosen't matter.)
 
 ### Py Packages:
-flask
-xmltodict
-commentjson
+* flask
+* xmltodict
+* commentjson
 
 ### Other Code:
-python
-node.js
-sql
+* python
+* node.js
+* sql
 
 ### Apps:
-stacer
-librewolf
-visual studio
+* stacer
+* librewolf
+* visual studio
