@@ -79,20 +79,20 @@ def calc(x, n): # Simulate unperdictability and write final value to weight
     choice = short[str(n)] # choiceN
     weight[choice] += round(x + random.uniform(0, 0.10), 2)
     dprint(f"weight['{choice}'] written as {weight[choice]}")
-    
-calc(0, 1)
 
 def weigh(n):
-
-    global iid
-    n = str(n)
-    iid = idBase + "c" + n
 
     if n == "0":
         raise TypeError("weigh() does not take 0.")
 
+    global iid
+    n = str(n)
+    iid = idBase + "c" + n
+    points = 0 # Establish common variable.
+
     choice = short[n]
     print(iid)
+    calc(points, n)
 
 weigh(1)
 
