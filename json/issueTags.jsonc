@@ -35,7 +35,7 @@
 
         "options" : 3,
 
-        "optionOne" : { // Stats for choice one
+        "option1" : { // Stats for choice one
 
             "civilRights" : "down",
             "politicalRights" : "up",
@@ -44,7 +44,7 @@
 
         },
 
-        "optionTwo" : {
+        "option2" : {
 
             "civil" : "up",
             "politicalRights" : "down",
@@ -52,7 +52,7 @@
 
         },
 
-        "optionThree" : {
+        "option3" : {
 
             "neverVote" : true
 

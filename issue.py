@@ -6,7 +6,7 @@ import commentjson as cjson
 
 os.system("clear")
 
-with open("json/sys.jsonc", "r") as s:
+with open("json/sys.jsonc", "r") as s: # Load software settings
     sys = cjson.load(s)
     print("json.jsonc loaded.")
 
@@ -14,7 +14,7 @@ with open("json/prefs.jsonc", "r") as p: # Load account settings
     prefs = cjson.load(p)
     print("prefs.jsonc loaded.")
 
-with open("json/account.jsonc", "r") as a:
+with open("json/account.jsonc", "r") as a: # Load accound information
     acc = json.load(a)
     print("account.jsonc loaded.")
 
@@ -42,16 +42,10 @@ while True: # Input loop
 idBase = "id" + str(issue) # Make a base id to use and modify later.
 iid = ""
 
-with open("json/issueTags.jsonc", "r") as issueTags: # Load issue tags.
-    data = cjson.load(issueTags)
+with open("json/issueTags.jsonc", "r") as i: # Load issue tags.
+    data = cjson.load(i)
 
-    # Long list of variables.
-
-    #for x in range(sys["suppot"]): # Future logic.
-    id0cn = data.get("id0", {}).get("options") # Issue id 0, amount of choices.
-    id0c1 = data.get("id0", {}).get("optionOne", {}) # Issue id 0, choise 1.
-    id0c2 = data.get("id0", {}).get("optionTwo", {})
-    id0c3 = data.get("id0", {}).get("optionThree", {})
+print(data)
 
 civilRights = 64.89
 conservatism = 43.67
@@ -74,25 +68,58 @@ short = {
     "5" : "choiceFive"
 }
 
+run = data[idBase]["options"]
+
 def calc(x, n): # Simulate unperdictability and write final value to weight
     global weight
     choice = short[str(n)] # choiceN
-    weight[choice] += round(x + random.uniform(0, 0.10), 2)
+    weight[choice] += round(x + random.uniform(-0.10, 0.10), 2)
     dprint(f"weight['{choice}'] written as {weight[choice]}")
 
-def weigh(n):
+def weigh(n): # Sim
 
-    if n == "0":
+    if n == "0": # Raise error before the next one to tell whoever wrote the code that you cant put in a zero. Saves time.
         raise TypeError("weigh() does not take 0.")
+
+    # Get Variables.
 
     global iid
     n = str(n)
     iid = idBase + "c" + n
-    points = 0 # Establish common variable.
+    points = 0 # Will be added to weight
+    key = "option" + n
+    tags = data[idBase][key] # Simplify dictionary down to used tags.
+    print(f"weigh() TAGS: {tags}")
+    
+    # Logic | Use tags.get to make sure it does not crash upon finding nothing; may be common because different issues vary in results.
+    # If someone can find a better way to do this than feel free to try.
 
-    choice = short[n]
-    print(iid)
-    calc(points, n)
+    match tags.get("civilRights"):
+        case "down":
+            if civilRights == 80:
+                points -= 0.05
+            elif civilRights >= 70:
+                points -= 0.15
+            elif civilRights >= 50:
+                points -= 1.00
+            else:
+                points -= 1.75
+        case "up":
+            if civilRights == 80:
+                points += 0.10
+            elif civilRights >= 70:
+                points += 0.45
+            elif civilRights >= 50:
+                points += 1.75
+            else:
+                points += 2.00
+
+    calc(points, n) # Finish by writing weight.
+
+def sim(): # Simplify the simulation process.
+    for r in range(int(run)):
+        r + 1
+        weigh(r)
 
 weigh(1)
 
