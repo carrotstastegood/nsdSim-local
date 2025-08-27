@@ -1,13 +1,17 @@
+import cmd
+import json
 import math
 import os
-import json
 import requests
+import sys
 import xmltodict as xtd
 
 os.system("clear")
 
 # Set setup to true
 
+class setup(cmd.Cmd): # Used later.
+    pass
 
 with open("json/prefs.jsonc", "r") as p:
     prefs = json.load(p)
