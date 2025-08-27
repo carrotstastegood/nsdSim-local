@@ -1,6 +1,6 @@
 import json
 
-with open("json/prefs.jsonc", "r") as p:
+with open("json/usr/prefs.jsonc", "r") as p:
     d = json.load(p)
 
 setup = d.get("setup", 1)

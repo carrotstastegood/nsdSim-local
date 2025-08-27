@@ -13,9 +13,9 @@ os.system("clear")
 class setup(cmd.Cmd): # Used later.
     pass
 
-with open("json/prefs.jsonc", "r") as p:
+with open("json/usr/prefs.jsonc", "r") as p:
     prefs = json.load(p)
-with open("json/account.jsonc", "r") as a:
+with open("json/usr/account.jsonc", "r") as a:
     acc = json.load(a)
 
 # Prepare for getting user data

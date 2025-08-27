@@ -6,17 +6,20 @@ import commentjson as cjson
 
 os.system("clear")
 
-with open("json/sys.jsonc", "r") as s: # Load software settings
+with open("json/app/app.jsonc", "r") as s: # Load software settings
     sys = cjson.load(s)
     print("json.jsonc loaded.")
 
-with open("json/prefs.jsonc", "r") as p: # Load account settings
+with open("json/usr/prefs.jsonc", "r") as p: # Load account settings
     prefs = cjson.load(p)
     print("prefs.jsonc loaded.")
 
-with open("json/account.jsonc", "r") as a: # Load accound information
+with open("json/usr/account.jsonc", "r") as a: # Load accound information
     acc = json.load(a)
     print("account.jsonc loaded.")
+
+with open("json/app/issueTags.jsonc", "r") as i: # Load issue tags.
+    data = cjson.load(i)
 
 def dprint(s): # Print debug text
     if prefs["debug"]:
@@ -41,11 +44,6 @@ while True: # Input loop
 
 idBase = "id" + str(issue) # Make a base id to use and modify later.
 iid = ""
-
-with open("json/issueTags.jsonc", "r") as i: # Load issue tags.
-    data = cjson.load(i)
-
-print(data)
 
 civilRights = 64.89
 conservatism = 43.67
