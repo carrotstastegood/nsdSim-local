@@ -15,12 +15,14 @@ with open("json/usr/prefs.jsonc", "r") as p: # Load account settings
     print("prefs.jsonc loaded.")
 
 with open("json/usr/account.jsonc", "r") as a: # Load accound information
-    acc = json.load(a)
+    acc = cjson.load(a)
     print("account.jsonc loaded.")
 
 with open("json/app/issueTags.jsonc", "r") as i: # Load issue tags.
     data = cjson.load(i)
+    print("issueTags.jsonc loaded.")
 
+print(prefs)
 def dprint(s): # Print debug text
     if prefs["debug"]:
         print(s)
