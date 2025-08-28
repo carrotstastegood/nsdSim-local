@@ -1,6 +1,7 @@
 import cmd
 import json
 import os
+import subprocess
 import sys
 import commentjson as cjson
 
@@ -22,7 +23,8 @@ class main(cmd.Cmd):
 
     def do_sim(self, arg):
         if arg == "-i":
-            exec(open("code/sim/issue.py").read())
+            subprocess.run([sys.executable, "code/sim/issue.py"])
+            quit()
         elif arg == "-f":
             exec(open("code/sim/federal.py").read())
 
@@ -42,7 +44,7 @@ class main(cmd.Cmd):
     # Help
 
     def help_sim(self):
-        print("")
+        print("Simulate issues. \n  -i | Issue votes \n  -f | Federal elections")
 
     def help_clear(self):
         print("Clears terminal.")

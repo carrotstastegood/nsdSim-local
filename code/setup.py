@@ -1,4 +1,3 @@
-import cmd
 import json
 import math
 import os
@@ -9,9 +8,6 @@ import xmltodict as xtd
 os.system("clear")
 
 # Set setup to true
-
-class setup(cmd.Cmd): # Used later.
-    pass
 
 with open("json/usr/prefs.jsonc", "r") as p:
     prefs = json.load(p)
@@ -168,10 +164,9 @@ if rawData.status_code == 200: # Do the thing
         prefs["setup"] = True
         prefs["vol"] = vol
         prefs["debug"] = debug
+        json.dump(prefs, p, indent=4)
     
     with open("json/account.jsonc", "w") as a:
         acc["nsdSim"]["username"] = username
         acc["nsdSim"]["url"] = url
-
-    json.dump(prefs, p, indent=4)
-    json.dump(acc, all, indent=4)
+        json.dump(acc, a, indent=4)
