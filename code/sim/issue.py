@@ -11,11 +11,11 @@ with open("json/app/app.jsonc", "r") as s: # Load software settings
     print("json.jsonc loaded.")
 
 with open("json/usr/prefs.jsonc", "r") as p: # Load account settings
-    prefs = cjson.load(p)
+    prefs = json.load(p)
     print("prefs.jsonc loaded.")
 
 with open("json/usr/account.jsonc", "r") as a: # Load accound information
-    acc = cjson.load(a)
+    acc = json.load(a)
     print("account.jsonc loaded.")
 
 with open("json/app/issueTags.jsonc", "r") as i: # Load issue tags.
@@ -52,7 +52,7 @@ conservatism = 43.67
 politicalRights = 52.95
 tax = 73.25
 
-weight = {
+weight = { # Main data to determine who wins. Higher the weight, higher the vote.
     "choiceOne" : 0.00,
     "choiceTwo" : 0.00,
     "choiceThree" : 0.00,
@@ -60,7 +60,7 @@ weight = {
     "choiceFive" : 0.00
 }
 
-short = {
+short = { # Convert numbers into key names used in weight dict.
     "1" : "choiceOne",
     "2" : "choiceTwo",
     "3" : "choiceThree",
@@ -68,7 +68,7 @@ short = {
     "5" : "choiceFive"
 }
 
-run = data[idBase]["options"]
+options = data[idBase]["options"] # Used in sim() function in ln 119 to determine how much times it should run.
 
 def calc(x, n): # Simulate unperdictability and write final value to weight
     global weight
@@ -89,7 +89,7 @@ def weigh(n): # Sim
     points = 0 # Will be added to weight
     key = "option" + n
     tags = data[idBase][key] # Simplify dictionary down to used tags.
-    print(f"weigh() TAGS: {tags}")
+    dprint(f"weigh() TAGS: {tags}")
     
     # Logic | Use tags.get to make sure it does not crash upon finding nothing; may be common because different issues vary in results.
     # If someone can find a better way to do this than feel free to try.
@@ -114,42 +114,38 @@ def weigh(n): # Sim
             else:
                 points += 2.00
 
+    if tags.get("neverVote"): # Future logic.
+        pass
+
     calc(points, n) # Finish by writing weight.
 
 def sim(): # Simplify the simulation process.
-    for r in range(int(run)):
-        r + 1
+    for r in range(int(options)):
+        print(r)
+        r += 1 # R starts at 0.
         weigh(r)
 
-weigh(1)
+sim() # Actually do the simulation.
 
 print(weight)
 
 # Calculate and show final scores
 
-total = weight["choiceOne"] + weight["choiceTwo"] + weight["choiceThree"] + weight["choiceFour"] + weight["choiceFive"]
-while True:
-    try:
-        one = (weight["choiceOne"] / total) * 100
-        two = (weight["choiceTwo"] / total) * 100
-        three = (weight["choiceThree"] / total) * 100
-        four = (weight["choiceFour"] / total) * 100
-        five = (weight["choiceFive"] / total) * 100
-        break
-    except ZeroDivisionError:
-        total = 1
-        print(f"Total weight is {total}, read as zero.")
+total = 0 # DO THIS OR IT RETURNS STUPID BULLSHIT
+total += weight["choiceOne"] + weight["choiceTwo"] + weight["choiceThree"] + weight["choiceFour"] + weight["choiceFive"] 
 
+try: # Calculate percentages
+    dprint(total)
+    one = round((weight["choiceOne"] / total) * 100, 2)
+    two = round((weight["choiceTwo"] / total) * 100, 2)
+    three = round((weight["choiceThree"] / total) * 100, 2)
+    four = round((weight["choiceFour"] / total) * 100, 2)
+    five = round((weight["choiceFive"] / total) * 100, 2)
+except ZeroDivisionError:
+    total = 1
+    print(f"Total weight is {total}, read as zero.")
 
-scores = { # Used for checking the largest value - the winner
-    "one" : one,
-    "two" : two,
-    "three" : three,
-    "four" : four,
-    "five" : five
-}
-
-victor = max(scores, key=scores.get)
+victor = max(weight, key=weight.get) # Find option with largest weight.
 popularity = 75.00 # Will be loaded one it exists; It will be used / needed later.
 
 print("Final scores:")
@@ -166,8 +162,8 @@ print()
 while True:
     vote = input("Which choice will you implement? (full word) > ")
     if vote != victor and vote in ["one", "two", "three", "four", "five"]:
-        for x in range(round(scores[victor] / 50)):
-            popularity -= (scores[victor] / 8)
+        for x in range(round(weight[victor] / 50)):
+            popularity -= (weight[victor] / 8)
             dprint(f"Popularity: {popularity}")
         print(f"Current party populatity: {popularity}")
         break

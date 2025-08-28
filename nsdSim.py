@@ -1,4 +1,6 @@
 import json
+import subprocess
+import sys
 
 with open("json/usr/prefs.jsonc", "r") as p:
     d = json.load(p)
@@ -6,9 +8,12 @@ with open("json/usr/prefs.jsonc", "r") as p:
 setup = d.get("setup", 1)
 
 if setup:
-    exec(open("code/app.py").read())
-elif setup == 1:
-    print("Setup value is missing.")
-    exec(open("code/setup.py").read())
+    subprocess.run([sys.executable, "code/app.py"])
+
+elif not setup:
+    subprocess.run([sys.executable, "code/setup.py"])
+
+
 else:
-    exec(open("code/setup.py").read())
+    print("Setup value is missing.")
+    subprocess.run([sys.executable, "code/setup.py"])
