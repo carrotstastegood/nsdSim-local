@@ -155,6 +155,9 @@ def finish():
 
 finish()
 
+# If all numbers are negative or positive it works fine. But if there are both positive and negative numbers, it returns percentages totaling over 100%.
+# Might wait untill the actuall simulation part of the script is done to look at this further.
+
 trueTotal += (weight["choiceOne"] + weight["choiceTwo"] + weight["choiceThree"] + weight["choiceFour"] + weight["choiceFive"])
 dprint(f"trueTotal : {trueTotal}")
 
