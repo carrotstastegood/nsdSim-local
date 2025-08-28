@@ -160,13 +160,13 @@ if rawData.status_code == 200: # Do the thing
     #warSupport = (((arms + army) / 2) - (pacifism * 1.5))
     #print(warSupport)
 
-    with open("json/prefs.jsonc", "w") as p:
+    with open("json/usr/prefs.jsonc", "w") as p:
         prefs["setup"] = True
         prefs["vol"] = vol
         prefs["debug"] = debug
         json.dump(prefs, p, indent=4)
     
-    with open("json/account.jsonc", "w") as a:
+    with open("json/usr/account.jsonc", "w") as a:
         acc["nsdSim"]["username"] = username
         acc["nsdSim"]["url"] = url
         json.dump(acc, a, indent=4)
