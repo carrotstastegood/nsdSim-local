@@ -31,6 +31,12 @@ def dprint(s): # Print debug text
     if prefs["debug"]:
         print(s)
 
+def ifprint(d, n): # Print debug text or normal text depending on user settings.
+    if prefs["debug"]:
+        print(d)
+    else:
+        print((n))
+
 if not prefs["debug"]:
     os.system("clear")
 dprint("Option 'debug' is set to True")
@@ -93,7 +99,7 @@ def weigh(n): # Sim
     points = 0 # Will be added to weight
     key = "option" + n
     tags = data[idBase][key] # Simplify dictionary down to used tags.
-    dprint(f"weigh() TAGS: {tags}")
+    dprint(f"weigh() Issue Tags = {tags}")
     
     # Logic | Use tags.get to make sure it does not crash upon finding nothing; may be common because different issues vary in results.
     # If someone can find a better way to do this than feel free to try.
@@ -125,8 +131,8 @@ def weigh(n): # Sim
 
 def sim(): # Simplify the simulation process.
     for r in range(int(options)):
-        print(r)
         r += 1 # R starts at 0.
+        print(f"sim(): Turn {r}")
         weigh(r)
 
 sim() # Actually do the simulation.
@@ -135,19 +141,32 @@ print(weight)
 
 # Calculate and show final scores
 
-total = 0 # DO THIS OR IT RETURNS STUPID BULLSHIT
-total += weight["choiceOne"] + weight["choiceTwo"] + weight["choiceThree"] + weight["choiceFour"] + weight["choiceFive"] 
+total = 0 # DO THIS OR IT RETURNS STUPID BULLSHIT 
+trueTotal = 0
+
+def finish():
+    global total
+    for x in range(5): # Check if the weight key exists, then add the weight to the total.
+        x += 1
+        print(f"finish(): Turn {x}")
+        if weight.get(short[str(x)]) != None: # Does choiceX exist
+            total += weight[short[str(x)]] # Write to key.
+            print(weight.get(short[str(x)]))
+
+finish()
+
+trueTotal += (weight["choiceOne"] + weight["choiceTwo"] + weight["choiceThree"] + weight["choiceFour"] + weight["choiceFive"])
+dprint(f"trueTotal : {trueTotal}")
 
 try: # Calculate percentages
-    dprint(total)
+    dprint(f"Total : {total}")
     one = round((weight["choiceOne"] / total) * 100, 2)
     two = round((weight["choiceTwo"] / total) * 100, 2)
     three = round((weight["choiceThree"] / total) * 100, 2)
     four = round((weight["choiceFour"] / total) * 100, 2)
     five = round((weight["choiceFive"] / total) * 100, 2)
 except ZeroDivisionError:
-    total = 1
-    print(f"Total weight is {total}, read as zero.")
+    raise ZeroDivisionError(f"Total weight is {total}, read as zero.")
 
 victor = max(weight, key=weight.get) # Find option with largest weight.
 popularity = 75.00 # Will be loaded one it exists; It will be used / needed later.
