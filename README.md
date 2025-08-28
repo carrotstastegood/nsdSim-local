@@ -1,23 +1,17 @@
-# nsdSim-local
-Localy Run Unofficial Nationstates Democracy Simulator
+# nsdSim
 
-This version of nsdSim runs on your computer.
+nsdSim ((Unofficial) Nationstates Democracy Simulator) is an app for simulating elections for your Nationstates country. <br>
+There is a more user-friendly [web version](https://github.com/carrotstastegood/ns-democracy-sim) being very slowly developed. It will probably pick up speed once I finish this version.
 
-## TODO
+## How to use.
 
-## Server stuff (here because no one else can read this so it dosen't matter.)
+Currently, the app is not able to be used properly as it is far from done.
 
-### Py Packages:
-* flask
-* xmltodict
-* commentjson
+## Planned features
 
-### Other Code:
-* python
-* node.js
-* sql
+* Let citizens vote on issues.
+* Federal elections.
 
-### Apps:
-* stacer
-* librewolf
-* visual studio
+## In progress
+
+* Designing the issue election simulator.
