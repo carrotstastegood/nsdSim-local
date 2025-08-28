@@ -12,7 +12,8 @@
     "nsdSim" : {
 
         "username" : "",
-        "url" : ""
+        "url" : "",
+        "agent" : {}
 
     }
 

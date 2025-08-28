@@ -1,13 +1,17 @@
+import commentjson as cjson
 import math
 import os
 import json
 import random
-import commentjson as cjson
+import requests
+import subprocess
+import sys
+import xmltodict as xtd
 
 os.system("clear")
 
 with open("json/app/app.jsonc", "r") as s: # Load software settings
-    sys = cjson.load(s)
+    app = cjson.load(s)
     print("json.jsonc loaded.")
 
 with open("json/usr/prefs.jsonc", "r") as p: # Load account settings
@@ -175,10 +179,32 @@ while True:
 auto = input("Do you want to automatically answer? (WON'T GIVE TRADING CARDS) (y/N) ") # Will answer the issue later.
 while True:
     if auto in ["n", "N", ""]:
+        subprocess.run([sys.executable, "code/app.py"])
         break
     elif auto in ["y", "Y"]:
+        auto = True
         break
     else:
         print("Invalid input.")
 
-input("Press enter to exit: ")
+# Auto answer
+
+if not auto:
+    input("Press enter to exit > ")
+
+agent = acc["nsdSim"]["agent"]
+nation = acc["nsdSim"]["nation"]
+url = "https://www.nationstates.net/cgi-bin/api.cgi?nation=" + nation
+
+response = requests.get(url, headers=agent)
+
+if response.status_code == 404:
+    print("Invalid data for either usr agent or url:")
+    print(agent)
+    print(url)
+
+xml = response.text
+parse = xtd.parse(xml)
+
+print("Leaving to main app...")
+subprocess.run([sys.executable, "code/app.py"])
