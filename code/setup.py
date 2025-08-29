@@ -1,172 +1,56 @@
 import json
-import math
 import os
 import requests
+import subprocess
 import sys
 import xmltodict as xtd
 
 os.system("clear")
 
-# Set setup to true
+header = {"User-Agent" : "Mozilla/5.0 (X11; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0"}
+# ^^^ Need to properly get this (((HOWWWWWWWWWWWWWWWWWWWWWWWWWW??????????????????????????????????????????????????????????)))
 
-with open("json/usr/prefs.jsonc", "r") as p:
-    prefs = json.load(p)
-with open("json/usr/account.jsonc", "r") as a:
-    acc = json.load(a)
+while True: # Nation loop
+    
+    # Get user's nation
+    print("Input nation name")
+    nation = input("> ")
+    url = "https://www.nationstates.net/cgi-bin/api.cgi?nation=" + nation + ";q=census;scale=all;mode=score"
 
-# Prepare for getting user data
+    response = requests.get(url, headers=header)
 
-agent = {"User-Agent" : "Mozilla/5.0 (X11; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0"}
-
-while True:
-    nation = str(input("Name of your nation > "))
-    url = "https://www.nationstates.net/cgi-bin/api.cgi?nation=" + nation + ";q=+population"
-
-    if nation in ["gaster", "Gaster", "GASTER"]:
-        raise ConnectionAbortedError
-
-    # Get user data
-
-    rawData = requests.get(url, headers=agent)
-
-    if rawData.status_code == 404:
+    # Verify nation exists.
+    if response.status_code == 404:
         print("Nation does not exist.")
     else:
-        xml = rawData.text
-        data = xtd.parse(xml)
         break
 
-population = data["NATION"]["POPULATION"]
+while True:
 
-if int(population) <= 1000000: # Nationstates' api gives a population greater than one billion in a thousand.
-    population = int(population) * 1000000
+    # Ask for volume   
+    print("Volume")
+    vol = input("> ")
+    break
 
-print(f"Population write: {population}")
+while True:
 
-def newCensus(id):
-    global rawData, xml, nation, data, agent
-
-    if id == None:
-        raise TypeError(f"id value is not provided: {id}")
-
-    url = "https://www.nationstates.net/cgi-bin/api.cgi?nation=" + nation + ";q=census;scale=" + str(id) + ";mode=score"
-    rawData = requests.get(url, headers=agent)
-    xml = rawData.text
-    data = xtd.parse(xml)
-    
-    #print(url)
-    #print(data)
-    #print(data["NATION"]["CENSUS"]["SCALE"]["SCORE"])
-
-percent = 0
-complete = 0
-shade = ""
-
-#def progress():
-    #global percent, shade, complete
-    #complete += 1
-    #percent = round((complete / 30) * 100)
-    #bar = shade + " " + str(percent) + "%"
-    #print(bar)
-
-#progress()  
-
-if rawData.status_code == 200: # Do the thing
-    
-    print()
-
-    #---Actual Configuration---#
-
-    username = input("Enter a username > ")
-    if username == "":
-        username = "empty"
-        print("Empty input: username set to empty. You can change this later.")
-    vol = input("Sound volume > ")
-    debug = input("Show extra debug information? (y/n) > ")
-
-    if debug == "y":
-        debug = True
+    # Ask if debug
+    print("Enable debug mode?")
+    debug = input("> ")
+    if debug not in ["true", "false"]:
+        print("Must be a boolean (true, false).")
     else:
-        debug = False
+        break
 
-    #password goes here
+# Convert response into dict
 
-    #---Census Write---#
+xml = xtd.parse(response.text)
+data = xml
 
-    # Extra information for debug
-    print()
-    print("Reference URL (Shows all Census stats) >")
-    print(f"https://www.nationstates.net/cgi-bin/api.cgi?nation={nation};q=census;scale=all;mode=score")
-    print()
-    print("Negative stats are normal.")
-    print("cid = Census ID")
-    print()
+scores = data["NATION"]["CENSUS"]["SCALE"]
 
-    # Full data fetch.
+# Dictionaries
 
-    newCensus(0) # Civil Rights
-    civil = data["NATION"]["CENSUS"]["SCALE"]["SCORE"]
-    print(f"cid0 fetched: {civil}")
-    
-    newCensus(1) # Economy
-    economy = data["NATION"]["CENSUS"]["SCALE"]["SCORE"]
-    print(f"cid1 fetched: {economy}")
-    
-    newCensus(2) # Political Rights
-    political = data["NATION"]["CENSUS"]["SCALE"]["SCORE"]
-    print(f"cid2 fetched: {political}")
+census = {} # Will add more keys during for loop
 
-    newCensus(4) # Wealth Gaps
-    gap = data["NATION"]["CENSUS"]["SCALE"]["SCORE"]
-    print(f"cid4 fetched: {gap}")
-
-    newCensus(5) # Death rate (Unexpected Deaths)
-    udeath = data["NATION"]["CENSUS"]["SCALE"]["SCORE"]
-    print(f"cid5 fetched: {udeath}")
-
-    newCensus(10) # Car industry
-    auto = data["NATION"]["CENSUS"]["SCALE"]["SCORE"]
-    print(f"cid10 fetched: {auto}")
-
-    newCensus(13) # IT industry
-    it = data["NATION"]["CENSUS"]["SCALE"]["SCORE"]
-    print(f"cid13 fetched: {it}")
-
-    newCensus(15) # Fishing
-    fishing = data["NATION"]["CENSUS"]["SCALE"]["SCORE"]
-    print(f"cid15 fetched: {fishing}")
-
-    newCensus(16) # Arms manufacturing
-    arms = data["NATION"]["CENSUS"]["SCALE"]["SCORE"]
-    print(f"cid16 fetched: {arms}")
-
-    newCensus(17) # Farming
-    agriculture = data["NATION"]["CENSUS"]["SCALE"]["SCORE"]
-    print(f"cid17 fetched: {agriculture}")
-
-    newCensus(46) # Defence Forces
-    army = data["NATION"]["CENSUS"]["SCALE"]["SCORE"]
-    print(f"cid46 fetched: {army}")
-
-    newCensus(47) # Pacifism
-    pacifism = data["NATION"]["CENSUS"]["SCALE"]["SCORE"]
-    print(f"cid47 fetched: {pacifism}")
-
-    #---Creating Non-NS Stats---#
-
-    locals()
-
-    #float(arms), float(army), float(pacifism)
-    #warSupport = (((arms + army) / 2) - (pacifism * 1.5))
-    #print(warSupport)
-
-    with open("json/usr/prefs.jsonc", "w") as p:
-        prefs["setup"] = True
-        prefs["vol"] = vol
-        prefs["debug"] = debug
-        json.dump(prefs, p, indent=4)
-    
-    with open("json/usr/account.jsonc", "w") as a:
-        acc["nsdSim"]["username"] = username
-        acc["nsdSim"]["url"] = url
-        json.dump(acc, a, indent=4)
+# Get census data
