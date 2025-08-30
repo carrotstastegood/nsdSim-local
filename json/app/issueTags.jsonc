@@ -46,7 +46,7 @@
 
         "option2" : {
 
-            "civil" : "up",
+            "civilRights" : "up",
             "politicalRights" : "down",
             "conservatism" : "down"
 
