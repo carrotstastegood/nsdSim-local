@@ -30,7 +30,7 @@ print(f"Settins: {prefs}")
 
 def dprint(s): # Print debug text
     if prefs["debug"]:
-        print(s)
+        print()
 
 def ifprint(d, n): # Print debug text or normal text depending on user settings.
     if prefs["debug"]:
@@ -216,21 +216,23 @@ while True:
     else:
         print("Input must be a whole word (ex. one), and must be in all lower case")
 
-auto = input("Do you want to automatically answer? (WON'T GIVE TRADING CARDS) (y/N) ") # Will answer the issue later.
 while True:
+    auto = input("Do you want to automatically answer? (WON'T GIVE TRADING CARDS) (y/N) ") # Will answer the issue later.
     if auto in ["n", "N", ""]:
         subprocess.run([sys.executable, "code/app.py"])
+        quit()
         break
     elif auto in ["y", "Y"]:
         auto = True
         break
     else:
-        print("Invalid input.")
+        ifprint(f"Invalid input {auto}", "Invalid input.")
 
 # Auto answer
 
 if not auto:
     input("Press enter to exit > ")
+    quit()
 
 agent = acc["nsdSim"]["agent"]
 nation = acc["nsdSim"]["nation"]
