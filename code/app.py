@@ -18,7 +18,7 @@ def dprint(s):
         print(s)
 
 class main(cmd.Cmd):
-    intro = "nsdSim app. \nType help or ? to list commands."
+    intro = "nsdSim app. \nType help or ? to list commands. \nTry running 'help sim'!"
     prompt = "nsdSCLI > "
 
     def do_sim(self, arg): # Load simulator.
