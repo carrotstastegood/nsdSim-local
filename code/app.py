@@ -26,7 +26,7 @@ class main(cmd.Cmd):
             subprocess.run([sys.executable, "code/sim/issue.py"])
             quit()
         elif arg == "-f":
-            exec(open("code/sim/federal.py").read())
+            subprocess.run([sys.executable, "code/sim/federal.py"])
 
     def do_about(self, arg): # Display information about the app.
         print("nsdSim (Nationstates Democracy Simulator) is an unoficial tool to simulate elections.")
