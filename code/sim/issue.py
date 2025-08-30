@@ -26,7 +26,8 @@ with open("json/app/issueTags.jsonc", "r") as i: # Load issue tags.
     data = cjson.load(i)
     print("issueTags.jsonc loaded.")
 
-print(prefs)
+print(f"Settins: {prefs}")
+
 def dprint(s): # Print debug text
     if prefs["debug"]:
         print(s)
@@ -40,6 +41,7 @@ def ifprint(d, n): # Print debug text or normal text depending on user settings.
 if not prefs["debug"]:
     os.system("clear")
 dprint("Option 'debug' is set to True")
+dprint("") # Yes you need the quotations or it breaks dont ask
 
 allowed = [0]
 
@@ -84,7 +86,7 @@ def calc(x, n): # Simulate unperdictability and write final value to weight
     global weight
     choice = short[str(n)] # choiceN
     weight[choice] += round(x + random.uniform(-0.10, 0.10), 2)
-    dprint(f"weight['{choice}'] written as {weight[choice]}")
+    dprint(f"   > calc(): {choice} written as {weight[choice]}")
 
 def weigh(n): # Sim
 
@@ -99,7 +101,7 @@ def weigh(n): # Sim
     points = 0 # Will be added to weight
     key = "option" + n
     tags = data[idBase][key] # Simplify dictionary down to used tags.
-    dprint(f"weigh() Issue Tags = {tags}")
+    dprint(f"   > weigh(): Issue Tags are: {tags}")
     
     # Logic | Use tags.get to make sure it does not crash upon finding nothing; may be common because different issues vary in results.
     # If someone can find a better way to do this than feel free to try.
@@ -125,7 +127,7 @@ def weigh(n): # Sim
                 points += 2.00
 
     if tags.get("neverVote"): # Future logic.
-        pass
+        points -= 100000.00
 
     calc(points, n) # Finish by writing weight.
 
@@ -137,26 +139,38 @@ def sim(): # Simplify the simulation process.
 
 sim() # Actually do the simulation.
 
-print(weight)
-
 # Calculate and show final scores
 
 total = 0 # DO THIS OR IT RETURNS STUPID BULLSHIT 
 trueTotal = 0
 
-def finish():
+original = {}
+fallback = max(weight, key=weight.get)
+
+def flip(): # Prevent percentage values from being over 100%
+    global weight
+    for x in range(5):
+        x += 1
+        if weight.get(short[str(x)]) != None and weight.get(short[str(x)]) < 0:
+            original[short[str(x)]] = weight[short[str(x)]]
+            weight[short[str(x)]] = 0
+            dprint(f"Fliped {short[str(x)]} ({original[short[str(x)]]}) to 0")
+
+def finish(): # Finalize weight and calculate total.
     global total
     for x in range(5): # Check if the weight key exists, then add the weight to the total.
         x += 1
-        print(f"finish(): Turn {x}")
         if weight.get(short[str(x)]) != None: # Does choiceX exist
             total += weight[short[str(x)]] # Write to key.
-            print(weight.get(short[str(x)]))
+            print(f"finish(): Turn {x} | Value {short[str(x)]} = ", weight.get(short[str(x)]))
 
+dprint("")
+flip()
+dprint("")
 finish()
 
-# If all numbers are negative or positive it works fine. But if there are both positive and negative numbers, it returns percentages totaling over 100%.
-# Might wait untill the actuall simulation part of the script is done to look at this further.
+dprint("")
+dprint(f"Weight : {weight}")
 
 trueTotal += (weight["choiceOne"] + weight["choiceTwo"] + weight["choiceThree"] + weight["choiceFour"] + weight["choiceFive"])
 dprint(f"trueTotal : {trueTotal}")
@@ -169,7 +183,11 @@ try: # Calculate percentages
     four = round((weight["choiceFour"] / total) * 100, 2)
     five = round((weight["choiceFive"] / total) * 100, 2)
 except ZeroDivisionError:
-    raise ZeroDivisionError(f"Total weight is {total}, read as zero.")
+    try:
+        dprint(f"Total weight was {total}, read as zero.")
+        weight[fallback] = original[fallback]
+    except KeyError: # im going insane istg try dosent need an except to raise an error normally why does it need one here
+        raise KeyError("im going to kill myself")
 
 victor = max(weight, key=weight.get) # Find option with largest weight.
 popularity = 75.00 # Will be loaded one it exists; It will be used / needed later.
