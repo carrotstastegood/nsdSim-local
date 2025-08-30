@@ -30,7 +30,7 @@ print(f"Settins: {prefs}")
 
 def dprint(s): # Print debug text
     if prefs["debug"]:
-        print()
+        print(s)
 
 def ifprint(d, n): # Print debug text or normal text depending on user settings.
     if prefs["debug"]:
@@ -134,7 +134,7 @@ def weigh(n): # Sim
 def sim(): # Simplify the simulation process.
     for r in range(int(options)):
         r += 1 # R starts at 0.
-        print(f"sim(): Turn {r}")
+        dprint(f"sim(): Turn {r}")
         weigh(r)
 
 sim() # Actually do the simulation.
@@ -147,22 +147,41 @@ trueTotal = 0
 original = {}
 fallback = max(weight, key=weight.get)
 
+def shift(c, i): # Modify weight
+    global weight
+    weight[short[str(c)]] = i
+ 
+def getWeight(x): # Get weight from dict in a clean way.
+    return weight.get(short[str(x)])
+
+def getKey(x): # Get key from any dict in a clean way.
+    return short[str(x)]
+
 def flip(): # Prevent percentage values from being over 100%
     global weight
     for x in range(5):
         x += 1
-        if weight.get(short[str(x)]) != None and weight.get(short[str(x)]) < 0:
-            original[short[str(x)]] = weight[short[str(x)]]
-            weight[short[str(x)]] = 0
-            dprint(f"Fliped {short[str(x)]} ({original[short[str(x)]]}) to 0")
+        if getWeight(x) != None and getWeight(x) < 0:
+            original[getKey(x)] = getWeight(x)
+            shift(x, 0)
+            dprint(f"Fliped {getKey(x)} ({original[getKey(x)]}) to 0")
+
+def purge(): # Remove choices that don't exist in the issue.
+    global weight
+    for x in range(5):
+        x += 1
+        if x >= (options + 1):
+            del weight[short[str(x)]]
+            dprint(f"purge(): Removed {getKey(x)}")
 
 def finish(): # Finalize weight and calculate total.
     global total
     for x in range(5): # Check if the weight key exists, then add the weight to the total.
         x += 1
-        if weight.get(short[str(x)]) != None: # Does choiceX exist
-            total += weight[short[str(x)]] # Write to key.
-            print(f"finish(): Turn {x} | Value {short[str(x)]} = ", weight.get(short[str(x)]))
+        if getWeight(x) != None: # Does choiceX exist
+            total += getWeight(x) # Write to key.
+        if prefs["debug"]:
+            print(f"finish(): Turn {x} | Value {getKey(x)} = ", getWeight(x))
 
 dprint("")
 flip()
@@ -186,8 +205,9 @@ except ZeroDivisionError:
     try:
         dprint(f"Total weight was {total}, read as zero.")
         weight[fallback] = original[fallback]
-    except KeyError: # im going insane istg try dosent need an except to raise an error normally why does it need one here
-        raise KeyError("im going to kill myself")
+    except KeyError: # im going insane istg try dosent need an except to raise an error normally why does it need one here also why does it raise a keyerror what
+        total = 0.01
+        dprint("Set total weight from 0.00 to 0.01")
 
 victor = max(weight, key=weight.get) # Find option with largest weight.
 popularity = 75.00 # Will be loaded one it exists; It will be used / needed later.
